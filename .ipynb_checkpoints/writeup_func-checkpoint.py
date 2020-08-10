@@ -57,3 +57,25 @@ def account_creation_2(users):
     .count()
     .plot(title='Account Creation by Year', figsize=(15,10),kind="bar")
     )
+    
+def tweet_language(tweets):
+    """
+    displays top 10 most tweeted in languages by suspended accounts
+    """
+    return tweets['tweet_language'].groupby(tweets['tweet_language']).count().nlargest(10)
+
+def tweet_language_in(tweets):
+    """
+    displays top 10 userids of those who tweeted in indonesian
+    """
+    tweet_lang_user = tweets[['userid','tweet_language']][tweets['tweet_language'] == 'in']['userid']
+    return tweet_lang_user.groupby(tweet_lang_user).count().nlargest(10)
+
+def tweet_time(tweets):
+    """
+    displays concentration of tweets by time, in UTC
+    """
+    tweets.loc[:, 'tweet_time'] = pd.to_datetime(tweets.tweet_time).values
+    tweet_time_groupby = tweets['tweet_time'].groupby(tweets['tweet_time'].dt.hour).count()
+    
+    tweet_time_groupby.plot(title='Tweet Times')
